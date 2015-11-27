@@ -81,7 +81,9 @@ Testando o exemplo SNMP AGENTE
     do exemplo esboço Agentuino.
 12) No Agent_House_test_temp.ino altere os parametros de conexão do arduino com sua rede local, configure os OIDS seguindo o padrão abaixo :
 static char sysHumSensor[] PROGMEM   = "1.3.6.1.2.1.1.9.0";  // read-only  (Integer)
+
 a verificação do referido IOD
+
   if ( strcmp_P(oid, sysTempSensor ) == 0 ) {
       // handle sysDescr (set/get) requests
       if ( pdu.type == SNMP_PDU_SET ) {
