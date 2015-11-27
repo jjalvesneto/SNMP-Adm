@@ -1,6 +1,3 @@
-# SNMP-Adm
-Projeto SNMP Arduino PHP
-Este documento é muito mais um trabalho em andamento. Estas instruções não são necessariamente correto.
 
 CONFIGURAÇÃO DO AMBIENTE
 ==========================
@@ -20,7 +17,7 @@ CONFIGURAÇÃO DO AMBIENTE
       "Ethernet" substitui o diretório correspondente no diretório onde o Arduino
       mantém suas bibliotecas.
 
-3) Instale a biblioteca "ao vivo", o que não é distribuído como padrão com o
+3) Instale a biblioteca "Streaming", o que não é distribuído como padrão com o
    Software Arduino. A biblioteca vivo não é utilizado por si só Agentuino, mas é
    utilizado pela aplicação de demonstração.
    a) Baixe o arquivo de biblioteca (um arquivo zip) a partir de
@@ -41,7 +38,6 @@ CONFIGURAÇÃO DO AMBIENTE
    f) Criar um subdiretório chamado "freeMemory", dentro do diretório "exemplos".
    g) Neste novo diretório "freeMemory", crie um arquivo "FreeMemory.pde", contendo
       o código da seção intitulada "Exemplo esboço:" na página web parque infantil.
-
 
 INSTALAÇÃO Argentino biblioteca a partir de SVN
 ====================================
@@ -83,3 +79,28 @@ Testando o exemplo SNMP AGENTE
       snmpget -v -c 1 192.168.1.100 público 1.3.6.1.2.1.1.4.0
     A corda da comunidade, endereço IP e OID devem corresponder aos valores no código-fonte
     do exemplo esboço Agentuino.
+12) No Agent_House_test_temp.ino altere os parametros de conexão do arduino com sua rede local, configure os OIDS seguindo o padrão abaixo :
+static char sysHumSensor[] PROGMEM   = "1.3.6.1.2.1.1.9.0";  // read-only  (Integer)
+a verificação do referido IOD
+  if ( strcmp_P(oid, sysTempSensor ) == 0 ) {
+      // handle sysDescr (set/get) requests
+      if ( pdu.type == SNMP_PDU_SET ) {
+        // response packet from set-request - object is read-only
+        pdu.type = SNMP_PDU_RESPONSE;
+        pdu.error = SNMP_ERR_READ_ONLY;
+      } else {
+        // response packet from get-request - locDescr
+        int chk = DHT11.read(DHT11PIN);
+        Serial.println(DHT11.temperature);
+        Serial.println(DHT11.humidity);
+        status = pdu.VALUE.encode(SNMP_SYNTAX_INT, DHT11.temperature);
+        pdu.type = SNMP_PDU_RESPONSE;
+        pdu.error = status;
+      }
+      //
+      #ifdef DEBUG
+        Serial << F("Valor Temperatura ... ") << DHT11.temperature << F(" ") << pdu.VALUE.size << endl;
+      #endif
+    }
+    
+    Dúvidas jj.alvesneto92@gmail.com
